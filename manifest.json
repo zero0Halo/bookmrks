@@ -1,0 +1,12 @@
+{
+	"manifest_version": 2,
+  "name": "Bookmrks",
+	"version": "0.1",
+
+  "description": "An extension to help me have better bookmarks.",
+
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  }
+
+}

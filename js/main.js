@@ -17,6 +17,7 @@ define([
 
 	var markModel = new MarkModel();
 
+	//test
 
 	require(['app/channel'], function(channel){
 		channel.on('go', function(){

@@ -2,29 +2,40 @@ define([
 	"jquery",
 	"underscore",
 	"backbone",
-	"views/MarkView",
-	"views/BookmrksView",
+  "js.cookie",
+  "app/eventsbb",
+	"views/MrkView",
+  "views/BookmrksView",
+	"views/ColumnView",
 ], function(
 	$,
 	_,
 	Backbone,
-	MarkView,
-	BookMrksView
+  Cookies,
+  EventsBB,
+	MrkView,
+  BookmrksView,
+	ColumnView
 ){
+  // Cookies.remove('columns')
 
+  var Columns = Cookies.get('columns');
+  var data = {};
 
-	var MarkModel = Backbone.Model.extend({});
+	EventsBB.on('go', function(){
+		console.log('go')
+	});
 
-	var markModel = new MarkModel();
+  // Creates the overall container
+  var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
 
-	//test
-
-	require(['app/channel'], function(channel){
-		channel.on('go', function(){
-			console.log('go')
-		})
-	})
-
-	var markView = new MarkView({model: markModel});
+  if(Columns === undefined){
+    var title = "New"
+    var columnView = new ColumnView({ el: $('.mrksHolder'), model: { title: title } });
+    data.title = title;
+    Cookies.set('columns', JSON.stringify(data) );
+  } else {
+    console.log( JSON.parse( Columns ) )
+  }
 
 });

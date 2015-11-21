@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <head>
-	<title>Bookmrks</title>
+  <title>Bookmrks</title>
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-	<h1>Hello World!</h1>
+  <h1>Hello World!</h1>
+    <div id="bookmrks"></div>
 
-	<script data-main="js/app" type="text/javascript" src="js/require.min.js"></script>
+    <script type="text/template" id="bookmrksTemplate">
+      <a class="newMrk button">New Mrk +</a>
+      <a class="newZone button">New Zone +</a>
+      
+      <div class="mrksHolder"></div>
+
+      <div class="newModal">
+        <input type="text" class="linkName">
+        <input type="text" class="linkUrl">
+        <input type="button" class="newLink" value="Create Link">
+      </div>
+    </script>
+
+
+    <script type="text/template" id="columnTemplate">
+      <div class="column">
+        <h2><%= title %></h2>
+        <div class="mrks"></div>
+      </div>
+    </script>
+
+  <script data-main="js/app" type="text/javascript" src="js/require.min.js"></script>
 </body>
 </html>

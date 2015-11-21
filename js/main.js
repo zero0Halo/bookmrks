@@ -29,13 +29,20 @@ define([
   // Creates the overall container
   var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
 
+  // Beginnings of loading data from the stored cookie
   if(Columns === undefined){
     var title = "New"
     var columnView = new ColumnView({ el: $('.mrksHolder'), model: { title: title } });
     data.title = title;
     Cookies.set('columns', JSON.stringify(data) );
   } else {
-    console.log( JSON.parse( Columns ) )
+    var cookieData = JSON.parse( Columns );
+
+    for(var column in cookieData ) {
+      var paramaters = {};
+      paramaters[column] = cookieData[column];
+      var columnView = new ColumnView({ el: $('.mrksHolder'), model: paramaters });
+    }
   }
 
 });

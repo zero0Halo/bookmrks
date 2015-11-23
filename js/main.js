@@ -18,35 +18,47 @@ define([
 	ColumnView
 ){
   // Cookies.remove('columns')
-
   var Columns = Cookies.get('columns');
   var data = {};
-
-	EventsBB.on('modalOpen', function(){
-		$('.newModal').addClass('active');
-	});
-
-  EventsBB.on('modalClose', function(){
-    $('.newModal').removeClass('active');
-  });  
 
   // Creates the overall container
   var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
 
   // Beginnings of loading data from the stored cookie
   if(Columns === undefined){
-    var title = "New"
-    var columnView = new ColumnView({ el: $('.mrksHolder'), model: { title: title } });
-    data.title = title;
+    var data = { title: "New" };
+    var columnView = new ColumnView({ el: $('.mrksHolder'), model: data });
     Cookies.set('columns', JSON.stringify(data) );
   } else {
     var cookieData = JSON.parse( Columns );
 
     for(var column in cookieData ) {
-      var paramaters = {};
-      paramaters[column] = cookieData[column];
-      var columnView = new ColumnView({ el: $('.mrksHolder'), model: paramaters });
+      var data = {
+        title: column,
+        theRest: cookieData[column]
+      }
+      var columnView = new ColumnView({ el: $('.mrksHolder'), model: data });
     }
+  }
+
+  EventsBB.on('update', function(payload){
+    updateHeader(payload)
+  });
+
+  function updateHeader(payload){
+    var oldH = payload.oldHeader;
+    var newH = payload.newHeader;
+    var cookieData = JSON.parse( Columns );
+
+    console.log(oldH, newH)
+
+    if( cookieData.hasOwnProperty(oldH) ){
+      cookieData[newH] = cookieData[oldH];
+      delete cookieData[oldH];
+
+      Cookies.set('columns', JSON.stringify(cookieData) );
+    }
+
   }
 
 });

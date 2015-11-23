@@ -11,21 +11,30 @@ define([
 ){
 
 	var BookmrksView = Backbone.View.extend({
-		initialize: function(){ 
+		initialize: function(){
+      // this.modal.open.bind(this);
       this.render();
 		},
 		render: function(){
       var template = _.template( $('#bookmrksTemplate').html(), {} );
-      
+
       this.$el.html(template);
 		},
     events: {
-      "click a.newMrk": function (e){        
-        EventsBB.trigger('modalOpen', { events:e });
+      "click a.newMrk": function (e){ console.log(e)
+        this.modal.open(this);
       },
 
       "click input.newLink": function(e){
-        EventsBB.trigger('modalClose', {events:e });
+        this.modal.close(this);
+      }
+    },
+    modal : {
+      open: function(self){
+        self.$el.find('.newModal').addClass('active');
+      },
+      close: function(self){
+        self.$el.find('.newModal').removeClass('active');
       }
     }
 	});

@@ -12,7 +12,7 @@
     <script type="text/template" id="bookmrksTemplate">
       <a class="newMrk button">New Mrk +</a>
       <a class="newZone button">New Zone +</a>
-      
+
       <div class="mrksHolder"></div>
 
       <div class="newModal">
@@ -25,7 +25,10 @@
 
     <script type="text/template" id="columnTemplate">
       <div class="column">
-        <h2><%= title %></h2>
+        <h2>
+          <span class="text active"><%= title %></span>
+          <input class="edit" type="text" value=<%= title %>>
+        </h2>
         <div class="mrks"></div>
       </div>
     </script>

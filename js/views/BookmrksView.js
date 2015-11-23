@@ -20,12 +20,12 @@ define([
       this.$el.html(template);
 		},
     events: {
-      "click a.newMrk": function (){        
-        EventsBB.trigger('go');
+      "click a.newMrk": function (e){        
+        EventsBB.trigger('modalOpen', { events:e });
       },
 
-      "click input.newLink": function(){
-        EventsBB.trigger('')
+      "click input.newLink": function(e){
+        EventsBB.trigger('modalClose', {events:e });
       }
     }
 	});

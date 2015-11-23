@@ -22,9 +22,13 @@ define([
   var Columns = Cookies.get('columns');
   var data = {};
 
-	EventsBB.on('go', function(){
-		console.log('go')
+	EventsBB.on('modalOpen', function(){
+		$('.newModal').addClass('active');
 	});
+
+  EventsBB.on('modalClose', function(){
+    $('.newModal').removeClass('active');
+  });  
 
   // Creates the overall container
   var bookmrksView = new BookmrksView({ el: $('#bookmrks') });

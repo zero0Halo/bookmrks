@@ -6,7 +6,7 @@ define([
   "app/eventsbb",
 	"views/MrkView",
   "views/BookmrksView",
-	"views/ColumnView",
+	"views/ZoneView",
 ], function(
 	$,
 	_,
@@ -15,50 +15,142 @@ define([
   EventsBB,
 	MrkView,
   BookmrksView,
-	ColumnView
+	ZoneView
 ){
-  // Cookies.remove('columns')
-  var Columns = Cookies.get('columns');
-  var data = {};
+  // Cookies.remove('zones');
 
-  // Creates the overall container
-  var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
+  var BookMrks = function(){
+    self=this;
+    self.zones = self.c.get();
 
-  // Beginnings of loading data from the stored cookie
-  if(Columns === undefined){
-    var data = { title: "New" };
-    var columnView = new ColumnView({ el: $('.mrksHolder'), model: data });
-    Cookies.set('columns', JSON.stringify(data) );
-  } else {
-    var cookieData = JSON.parse( Columns );
+    self.init();
+  }
+  BookMrks.prototype.init = function(){
+    var self=this;
 
-    for(var column in cookieData ) {
-      var data = {
-        title: column,
-        theRest: cookieData[column]
+    EventsBB.on('newZone', function(payload){
+      self.newZone(payload);
+    });
+
+    EventsBB.on('update', function(payload){
+      self.updateHeader(payload);
+    }); 
+
+    var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
+    self.makeZones();
+  }
+  BookMrks.prototype.makeZones = function(){ console.log('goz')
+    var self=this;
+
+    if(self.zones === undefined){
+      EventsBB.trigger('newZone', { init: true });
+    } else {
+      var cookieData = self.c.get();
+
+      for(var zone in cookieData ) {
+        var data = {
+          title: cookieData[zone].title,
+          id: cookieData[zone].id
+        }
+        var zoneView = new ZoneView({ model: data });
       }
-      var columnView = new ColumnView({ el: $('.mrksHolder'), model: data });
+    }    
+  }
+  BookMrks.prototype.newZone = function(payload){
+    var self=this;
+    var id = "zone"+Math.floor(Math.random() * 10000);
+    var data = { title: "New", id:id };
+    var zoneView = new ZoneView({ model: data });
+    var cookieData;
+
+    if(payload && payload.init){
+      cookieData = {};
+    } else {
+      cookieData = self.c.get();
+    }
+    
+    cookieData[id] = data;
+    self.c.set(cookieData);
+  }
+  BookMrks.prototype.updateHeader = function(payload){
+    var title = payload.title;
+    var id = payload.id;
+    var cookieData = JSON.parse( Cookies.get('zones') );
+
+    cookieData[id].title = title;
+
+    self.c.set(cookieData);
+  }  
+  BookMrks.prototype.c = {
+    get: function(){
+      return JSON.parse( Cookies.get('zones') );
+    },
+    set: function(data){
+      Cookies.set('zones', JSON.stringify(data) );
     }
   }
 
-  EventsBB.on('update', function(payload){
-    updateHeader(payload)
-  });
+  var bookMrks = new BookMrks();
 
-  function updateHeader(payload){
-    var oldH = payload.oldHeader;
-    var newH = payload.newHeader;
-    var cookieData = JSON.parse( Columns );
+  // var Zones = Cookies.get('zones');
+  // // Creates the overall container
+  // var bookmrksView = new BookmrksView({ el: $('#bookmrks') });
 
-    console.log(oldH, newH)
 
-    if( cookieData.hasOwnProperty(oldH) ){
-      cookieData[newH] = cookieData[oldH];
-      delete cookieData[oldH];
+  // EventsBB.on('newZone', function(payload){
+  //   newZone(payload);
+  // });
 
-      Cookies.set('columns', JSON.stringify(cookieData) );
-    }
 
-  }
+  // // Beginnings of loading data from the stored cookie
+  // if(Zones === undefined){
+  //   EventsBB.trigger('newZone', { init: true });
+  // } else {
+  //   var cookieData = JSON.parse( Zones );
+
+  //   for(var zone in cookieData ) {
+  //     var data = {
+  //       title: cookieData[zone].title,
+  //       id: cookieData[zone].id
+  //     }
+  //     var zoneView = new ZoneView({ model: data });
+  //   }
+  // }
+
+  // EventsBB.on('update', function(payload){
+  //   updateHeader(payload);
+  // });
+
+
+
+
+  // function newZone(payload){
+  //   var id = "zone"+Math.floor(Math.random() * 10000);
+  //   var data = { title: "New", id:id };
+  //   var zoneView = new ZoneView({ model: data });
+  //   var cookieData;
+
+  //   if(payload && payload.init){
+  //     cookieData = {};
+  //   } else {
+  //     cookieData = JSON.parse( Cookies.get('zones') );
+  //   }
+    
+  //   cookieData[id] = data;
+  //   Cookies.set('zones', JSON.stringify(cookieData) );
+  // }
+
+
+  // function updateHeader(payload){
+  //   var title = payload.title;
+  //   var id = payload.id;
+  //   var cookieData = JSON.parse( Cookies.get('zones') );
+
+  //   cookieData[id].title = title;
+
+  //   Cookies.set('zones', JSON.stringify(cookieData) );
+
+
+  // }
 
 });

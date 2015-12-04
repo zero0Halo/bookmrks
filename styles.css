@@ -48,18 +48,18 @@ body {
   top:50%;
 }
 
-.column h2 {
+.zone h2 {
   position: relative;
   height:2em;
   display: block;
 }
-.column .text,
-.column .edit {
+.zone .text,
+.zone .edit {
   position: absolute;
   top:0;
   left:0;
   display: none;
 }
-.column .active {
+.zone .active {
   display: block;
 }

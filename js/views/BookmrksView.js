@@ -2,12 +2,14 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "app/eventsbb"
+  "app/eventsbb",
+  "views/ZoneView"
 ], function(
   $,
   _,
   Backbone,
-  EventsBB
+  EventsBB,
+  ZoneView
 ){
 
 	var BookmrksView = Backbone.View.extend({
@@ -21,12 +23,16 @@ define([
       this.$el.html(template);
 		},
     events: {
-      "click a.newMrk": function (e){ console.log(e)
+      "click a.newMrk": function (e){
         this.modal.open(this);
       },
 
       "click input.newLink": function(e){
         this.modal.close(this);
+      },
+
+      "click a.newZone": function(e){
+        EventsBB.trigger('newZone');
       }
     },
     modal : {

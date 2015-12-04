@@ -10,16 +10,18 @@ define([
   EventsBB
 ){
 
-  var ColumnView = Backbone.View.extend({
+  var ZoneView = Backbone.View.extend({
+    className: "zone",
     initialize: function(){
       this.render();
     },
     render: function(){
       var template = _.template( $('#columnTemplate').html());
-      console.log(this.model)
       var rendered = template(this.model);
 
-      this.$el.html( rendered );
+      this.$el
+        .append( rendered )
+        .appendTo('.mrksHolder');
     },
     events: {
       "click h2 .text": function(e){
@@ -31,7 +33,8 @@ define([
       },
       "focusout h2 .edit": function(e){
         var $target = $(e.target);
-        var payload = { oldHeader: this.model.title, newHeader: $target.val() };
+        console.log($target)
+        var payload = { title: $target.val(), id: this.model.id };
 
         $target
           .removeClass('active')
@@ -44,6 +47,6 @@ define([
     }
   });
 
-  return ColumnView;
+  return ZoneView;
 
 })
